@@ -60,8 +60,9 @@ export const useTodolist = () => {
       }
     
       async function handleUpdateTodo(todoId: number, newText: string) {
+        debugger
         try {
-          setTodos(todos.map((todo) => (todo.id === todoId ? { ...todo, text: newText ,editing:!todo.editing} : todo)));
+          setTodos(todos.map((todo) => (todo.id === todoId ? { ...todo, editing:!todo.editing} : todo)));
           const response = await axios.patch(`${jsonServerUrl}/todos/${todoId}`, { text: newText });
           if (response.status === 200) { 
             setTodos(todos.map((todo) => (todo.id === todoId ? { ...todo, text: newText} : todo)));

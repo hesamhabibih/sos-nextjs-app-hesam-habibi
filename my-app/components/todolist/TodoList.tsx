@@ -51,7 +51,8 @@ const useStyles = makeStyles(() => ({
   },
   textitem:{
     textAlign: 'right',
-    float:'right'
+    float:'right',
+    fontFamily: 'YekanBakh!important'
   }
 }));
 

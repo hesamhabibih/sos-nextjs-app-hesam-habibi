@@ -6,13 +6,22 @@
 
 
 body {
-  font-family: 'YekanBakh';
+  font-family: 'YekanBakh'!important;
   background: #f7f7f7;
   padding: 0;
   margin: 0;
 }
-
+.image-article,
+.css-1t3c7s4-MuiTypography-root,
+.css-jo4v11-MuiTypography-root,
+.css-9mt8sl-MuiTypography-root,
+.css-1ht47m0-MuiTypography-root,
+.css-17ju7ma-MuiTypography-root,
+.css-sghohy-MuiButtonBase-root-MuiButton-root{
+  font-family: 'YekanBakh'!important;
+}
 .image-article{
+
   width: 240px;
   height: auto;
   border-radius: 16px;
