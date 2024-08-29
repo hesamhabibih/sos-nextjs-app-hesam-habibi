@@ -2,15 +2,16 @@
 
 
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {TextField, Button, List, ListItem, ListItemText, Checkbox, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { makeStyles } from '@mui/styles';
 import SaveIcon from '@mui/icons-material/Save'; 
-import axios from 'axios';
+import { useTodolist } from './Todolost.biz';
 
 
+ 
 const useStyles = makeStyles(() => ({
   todoListContainer: {
     display: 'flex',
@@ -46,107 +47,16 @@ const useStyles = makeStyles(() => ({
   editButton: {
     color: 'blue',
   },
+  textitem:{
+    textAlign: 'right',
+    float:'right'
+  }
 }));
 
-interface Todo {
-  id: number;
-  text: string;
-  completed?: boolean;
-  editing?: boolean;
-}
-
 const TodoList: React.FC = () => {
+
   const classes = useStyles();
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  const [inputValue, setInputValue] = useState('');
-  const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
-
-  const handleToggleComplete = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
-  };
-
-  const jsonServerUrl = 'http://localhost:3000'; 
-
-  async function fetchData(): Promise<Todo[]> {
-
-    try {
-      const response = await axios.get(`${jsonServerUrl}/todos`); 
-      const data = response.data as Todo[]; 
-      return data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error; 
-    }
-  }
-
-  useEffect(() => {
-    const fetchDataAsync = async () => {
-      try {
-        const fetchedData = await fetchData(); 
-        setTodos(fetchedData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-
-      }
-    };
-    fetchDataAsync();
-  }, []); 
-
-  async function handleDeleteTodo(todoId: number) {
-  debugger
-    try {
-      await axios.delete(`${jsonServerUrl}/todos/${todoId}`);
-      // Remove the deleted todo from the todos state
-      setTodos(todos.filter((todo) => todo.id !== todoId));
-    } catch (error) {
-      console.error('Error deleting todo:', error);
-    }
-  }
-
-  async function handleAddTodo() {
-    if (inputValue.trim() !== '') {
-      try {
-        const response = await axios.post(`${jsonServerUrl}/todos`, { id: Date.now(), text: inputValue, completed: false, editing: false });
-  
-        if (response.status === 201) {
-          setTodos([...todos, response.data]); 
-          setInputValue('');
-        } else {
-          console.error('Error adding todo:', response.data);
-        }
-      } catch (error) {
-        console.error('Error creating todo:', error);
-      }
-    }
-  }
-
-
-  async function handleUpdateTodo(todoId: number, newText: string) {
-    try {
-      setTodos(todos.map((todo) => (todo.id === todoId ? { ...todo, text: newText ,editing:!todo.editing} : todo)));
-      const response = await axios.patch(`${jsonServerUrl}/todos/${todoId}`, { text: newText });
-      if (response.status === 200) { 
-        setTodos(todos.map((todo) => (todo.id === todoId ? { ...todo, text: newText} : todo)));
-        
-      } else {
-        console.error('Unexpected update response status:', response.status);
-      }
-    } catch (error) {
-      console.error('Error updating todo:', error);
-    } 
-  }
-
-
-  async function handleChange(todoId: number, newText: string) {
-      setTodos(todos.map((todo) => (todo.id === todoId ? { ...todo, text: newText} : todo)));
-  }
-
-  
+  const { todos,inputValue, setInputValue,handleToggleComplete,handleDeleteTodo,handleAddTodo, handleUpdateTodo ,handleChange} = useTodolist()
 
   return (
     <div className={classes.todoListContainer}>
@@ -177,7 +87,7 @@ const TodoList: React.FC = () => {
                 onChange={(e) => handleChange(todo.id, e.target.value)}
                 fullWidth
               />
-            ) : todo.text} />
+            ) : <span  className={classes.textitem}>{todo.text}</span>} />
             <IconButton className={classes.editButton} onClick={() => handleUpdateTodo(todo.id,todo.text)}>
               {todo.editing ? <SaveIcon /> : <EditIcon />}</IconButton>
             <IconButton className={classes.deleteButton} onClick={() => handleDeleteTodo(todo.id)}><DeleteIcon /></IconButton>
@@ -186,6 +96,7 @@ const TodoList: React.FC = () => {
       </List>
     </div>
   );
+
 };
 
 export default TodoList;

@@ -11,7 +11,7 @@ interface IArticle {
 }
 
 export const Article = ({ index }: IArticle) => {
-  debugger
+  
   return (
     <Box p={2} borderRadius={2} border={"1px solid #0F5098"}>
       <Box display="flex" justifyContent="center">
