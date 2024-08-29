@@ -20,6 +20,8 @@ const useStyles = makeStyles(() => ({
   },
   inputField: {
     width: '100%',
+    textAlign:'right',
+    direction:'rtl'
   },
   button: {
     width: '100%',
@@ -32,7 +34,7 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     '&.even': {
-      backgroundColor: '#000',
+      backgroundColor: '#eee',
     },
     '&.odd': {
       backgroundColor: '#fff',
@@ -56,7 +58,7 @@ const useStyles = makeStyles(() => ({
 const TodoList: React.FC = () => {
 
   const classes = useStyles();
-  const { todos,inputValue, setInputValue,handleToggleComplete,handleDeleteTodo,handleAddTodo, handleUpdateTodo ,handleChange} = useTodolist()
+  const { todos,inputValue, setInputValue, handleToggleComplete, handleDeleteTodo, handleAddTodo, handleUpdateTodo ,handleChange} = useTodolist()
 
   return (
     <div className={classes.todoListContainer}>
